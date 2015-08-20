@@ -1,0 +1,8 @@
+Makefile
+.*.swp
+*.o
+moc_*.cpp
+*.so
+ui_*.h
+*.ofr
+*.pro.user*

@@ -1,0 +1,43 @@
+This is a plugin for Qmmp which supports OptimFROG files.
+
+The OptimFROG SDK is required: http://www.losslessaudio.org/SDK.php.
+Only version 1.400 (corresponding to OptimFROG 5.000) and later are
+supported.
+
+On Linux, the SDK is not installable in the way most packages are: it
+doesn't have a standard installation scheme that puts headers in
+/usr/include and libraries in /usr/lib, for example.  Instead, inside of
+the SDK is an “SDK” directory with the shared library in a “Library”
+directory and headers in “OptimFROG”.  The downside to this method is
+that the dynamic linker doesn't know where to find the shared library.
+An RPATH is set so the dynamic linker has an idea of where to look for
+the shared library, but if that directory is moved, the linker will not
+know where to find it.  Moving the library into /usr/lib or similar
+should alleviate the problem, but ideally OptimFROG would be able to
+install itself (or be installed) into /usr with standard accoutrements
+such as a pkgconf file and shared library versioning.  Upshot: you have
+to know where your shared library is since there's no standard for
+OptimFROG.
+
+Qmmp plus development headers need to be installed.  Some vendors may
+split Qmmp into two packages, with the development package being named
+something like qmmp-devel or libqmmp-dev.  Qt4 development packages are
+also required.
+
+A C++11 compiler is required.  Modern releases of GCC and Clang work
+fine.
+
+To build, run Qt4's qmake (often installed as qmake-qt4), passing the
+path to the SDK, and then build with make:
+
+$ qmake-qt4 OPTIMFROG_PATH=/path/to/OptimFROG_Linux_x64_5002/SDK
+$ make
+
+To install:
+
+$ make install
+
+This installs the plugin into Qmmp's input plugin directory.  To install
+to a staging area, such as for packaging:
+
+$ make install INSTALL_ROOT=/path/to/staging
