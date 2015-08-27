@@ -43,6 +43,8 @@ class FrogWrap
     };
 
     explicit FrogWrap(std::string);
+    FrogWrap(const FrogWrap &) = delete;
+    FrogWrap &operator=(const FrogWrap &) = delete;
     ~FrogWrap();
 
     static bool can_play(std::string);
@@ -62,9 +64,6 @@ class FrogWrap
     std::string get_tag(std::string tag) { return tags.at(tag); }
 
   private:
-    FrogWrap(const FrogWrap &);
-    FrogWrap &operator=(const FrogWrap &);
-
     void *decoder = OptimFROG_createInstance();
     OptimFROG_Info info;
     bool is_signed;
