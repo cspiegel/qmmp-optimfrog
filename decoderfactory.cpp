@@ -138,7 +138,7 @@ void OFRDecoderFactory::showAbout(QWidget *parent)
 
 QTranslator *OFRDecoderFactory::createTranslator(QObject *)
 {
-  return 0;
+  return nullptr;
 }
 
 Q_EXPORT_PLUGIN2(cas-ofr, OFRDecoderFactory)
