@@ -31,6 +31,7 @@
 #include <QIODevice>
 #include <QObject>
 #include <QString>
+#include <QTranslator>
 #include <QWidget>
 
 #include <qmmp/decoder.h>

@@ -31,6 +31,7 @@
 #include <QList>
 #include <QMessageBox>
 #include <QString>
+#include <QTranslator>
 #include <QtPlugin>
 
 #include <qmmp/fileinfo.h>
