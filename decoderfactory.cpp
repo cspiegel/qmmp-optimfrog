@@ -31,10 +31,12 @@
 #include <QList>
 #include <QMessageBox>
 #include <QString>
+#include <QStringList>
 #include <QTranslator>
 #include <QtPlugin>
 
 #include <qmmp/fileinfo.h>
+#include <qmmp/qmmp.h>
 
 #include "decoderfactory.h"
 #include "decoder.h"
@@ -72,7 +74,11 @@ Decoder *OFRDecoderFactory::create(const QString &path, QIODevice *)
   return new OFRDecoder(path);
 }
 
+#if QMMP_VERSION_MAJOR == 0 && QMMP_VERSION_MINOR == 8
 QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, bool use_metadata)
+#elif QMMP_VERSION_MAJOR == 0 && QMMP_VERSION_MINOR == 9
+QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, bool use_metadata, QStringList *)
+#endif
 {
   QList<FileInfo *> list;
 
