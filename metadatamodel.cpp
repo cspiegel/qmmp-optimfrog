@@ -25,7 +25,6 @@
  */
 
 #include <QHash>
-#include <QLatin1Char>
 #include <QObject>
 #include <QString>
 

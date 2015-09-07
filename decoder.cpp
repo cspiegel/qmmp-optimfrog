@@ -27,7 +27,6 @@
 #include <memory>
 
 #include <QString>
-#include <QtGlobal>
 
 #include <qmmp/decoder.h>
 
