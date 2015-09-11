@@ -31,7 +31,7 @@
 
 #include <QIODevice>
 
-#include <OptimFROG.h>
+#include <OptimFROG/OptimFROG.h>
 
 #include "frogwrap.h"
 

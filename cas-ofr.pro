@@ -14,7 +14,7 @@ unix {
 
   QMMP_PREFIX = $$system(pkg-config qmmp --var=prefix)
   INCLUDEPATH += $${QMMP_PREFIX}/include
-  INCLUDEPATH += $${OPTIMFROG_PATH}/OptimFROG
+  INCLUDEPATH += $${OPTIMFROG_PATH}
   LIBS += $${OPTIMFROG_PATH}/Library/libOptimFROG.so
   QMAKE_RPATHDIR += $${OPTIMFROG_PATH}/Library
 
