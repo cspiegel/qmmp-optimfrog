@@ -29,19 +29,29 @@
 #include <string>
 #include <vector>
 
-#include <strings.h>
+#include <QIODevice>
 
 #include <OptimFROG.h>
 
 #include "frogwrap.h"
 
-FrogWrap::FrogWrap(std::string filename)
+FrogWrap::FrogWrap(QIODevice *device)
 {
+  static ReadInterface rint =
+  {
+    ofr_close,
+    ofr_read,
+    ofr_eof,
+    ofr_seekable,
+    ofr_length,
+    ofr_get_pos,
+    ofr_seek,
+  };
   OptimFROG_Tags ofr_tags;
 
   if(decoder == C_NULL) throw InvalidFile();
 
-  if(!OptimFROG_open(decoder, const_cast<char *>(filename.c_str()), C_TRUE))
+  if(!OptimFROG_openExt(decoder, &rint, device, C_TRUE))
   {
     OptimFROG_destroyInstance(decoder);
     throw InvalidFile();

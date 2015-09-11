@@ -27,6 +27,7 @@
 #include <stdexcept>
 #include <map>
 
+#include <QFile>
 #include <QIODevice>
 #include <QList>
 #include <QMessageBox>
@@ -45,12 +46,22 @@
 
 bool OFRDecoderFactory::supports(const QString &source) const
 {
-  return FrogWrap::can_play(source.toUtf8().constData());
+  QFile file(source);
+
+  return file.open(QIODevice::ReadOnly) && canDecode(&file);
 }
 
-bool OFRDecoderFactory::canDecode(QIODevice *) const
+bool OFRDecoderFactory::canDecode(QIODevice *device) const
 {
-  return false;
+  try
+  {
+    FrogWrap frog(device);
+    return true;
+  }
+  catch(FrogWrap::InvalidFile)
+  {
+    return false;
+  }
 }
 
 const DecoderProperties OFRDecoderFactory::properties() const
@@ -69,9 +80,9 @@ const DecoderProperties OFRDecoderFactory::properties() const
   return properties;
 }
 
-Decoder *OFRDecoderFactory::create(const QString &path, QIODevice *)
+Decoder *OFRDecoderFactory::create(const QString &, QIODevice *device)
 {
-  return new OFRDecoder(path);
+  return new OFRDecoder(device);
 }
 
 #if QMMP_VERSION_MAJOR == 0 && QMMP_VERSION_MINOR == 8
@@ -81,45 +92,49 @@ QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, boo
 #endif
 {
   QList<FileInfo *> list;
+  QFile file(filename);
 
-  try
+  if(file.open(QIODevice::ReadOnly))
   {
-    FrogWrap frog(filename.toUtf8().constData());
-    FileInfo *file_info = new FileInfo(filename);
-
-    file_info->setLength(frog.length() / 1000);
-
-    if(use_metadata && frog.has_tags())
+    try
     {
-      std::map<enum Qmmp::MetaData, std::string> tagmap =
-      {
-        { Qmmp::TITLE, "Title" },
-        { Qmmp::ARTIST, "Artist" },
-        { Qmmp::ALBUM, "Album" },
-        { Qmmp::COMMENT, "Comment" },
-        { Qmmp::GENRE, "Genre" },
-        { Qmmp::COMPOSER, "Composer" },
-        { Qmmp::YEAR, "Year" },
-        { Qmmp::TRACK, "Track" },
-      };
+      FrogWrap frog(&file);
+      FileInfo *file_info = new FileInfo(filename);
 
-      for(auto &pair : tagmap)
+      file_info->setLength(frog.length() / 1000);
+
+      if(use_metadata && frog.has_tags())
       {
-        try
+        std::map<enum Qmmp::MetaData, std::string> tagmap =
         {
-          QString value = QString::fromStdString(frog.get_tag(pair.second));
-          file_info->setMetaData(pair.first, value.replace('\n', "<br>"));
-        }
-        catch(std::out_of_range)
+          { Qmmp::TITLE, "Title" },
+     { Qmmp::ARTIST, "Artist" },
+     { Qmmp::ALBUM, "Album" },
+     { Qmmp::COMMENT, "Comment" },
+     { Qmmp::GENRE, "Genre" },
+     { Qmmp::COMPOSER, "Composer" },
+     { Qmmp::YEAR, "Year" },
+     { Qmmp::TRACK, "Track" },
+        };
+
+        for(auto &pair : tagmap)
         {
+          try
+          {
+            QString value = QString::fromStdString(frog.get_tag(pair.second));
+            file_info->setMetaData(pair.first, value.replace('\n', "<br>"));
+          }
+          catch(std::out_of_range)
+          {
+          }
         }
       }
-    }
 
-    list << file_info;
-  }
-  catch(FrogWrap::InvalidFile)
-  {
+      list << file_info;
+    }
+    catch(FrogWrap::InvalidFile)
+    {
+    }
   }
 
   return list;

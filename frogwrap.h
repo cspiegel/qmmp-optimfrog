@@ -31,6 +31,8 @@
 #include <map>
 #include <string>
 
+#include <QIODevice>
+
 #include <OptimFROG.h>
 
 class FrogWrap
@@ -42,7 +44,7 @@ class FrogWrap
         InvalidFile() : std::exception() { }
     };
 
-    explicit FrogWrap(std::string);
+    explicit FrogWrap(QIODevice *);
     FrogWrap(const FrogWrap &) = delete;
     FrogWrap &operator=(const FrogWrap &) = delete;
     ~FrogWrap();
@@ -69,6 +71,16 @@ class FrogWrap
     bool is_signed;
 
     std::map<std::string, std::string> tags;
+
+    static QIODevice *VFS(void *instance) { return reinterpret_cast<QIODevice *>(instance); }
+
+    static condition_t ofr_close(void *) { return C_TRUE; }
+    static sInt32_t ofr_read(void *instance, void *buf, uInt32_t n) { return VFS(instance)->read(reinterpret_cast<char *>(buf), n); }
+    static condition_t ofr_eof(void* instance) { return VFS(instance)->atEnd(); }
+    static condition_t ofr_seekable(void* instance) { return !VFS(instance)->isSequential(); }
+    static sInt64_t ofr_length(void* instance) { return VFS(instance)->size(); }
+    static sInt64_t ofr_get_pos(void* instance) { return VFS(instance)->pos(); }
+    static condition_t ofr_seek(void* instance, sInt64_t offset) { return VFS(instance)->seek(offset); }
 };
 
 #endif

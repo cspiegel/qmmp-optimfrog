@@ -24,6 +24,7 @@
  * SUCH DAMAGE.
  */
 
+#include <QFile>
 #include <QHash>
 #include <QObject>
 #include <QString>
@@ -35,18 +36,23 @@
 
 OFRMetaDataModel::OFRMetaDataModel(const QString &path, QObject *parent) : MetaDataModel(parent)
 {
-  try
-  {
-    FrogWrap frog(path.toUtf8().constData());
+  QFile file(path);
 
-    ap.insert(tr("Bitrate"), tr("%1 kbps").arg(frog.bitrate()));
-    ap.insert(tr("Sample rate"), tr("%1 Hz").arg(frog.rate()));
-    ap.insert(tr("Channels"), QString::number(frog.channels()));
-    ap.insert(tr("Version"), QString::number(frog.version()));
-    ap.insert(tr("Compression ratio"), QString::number(frog.compression()));
-  }
-  catch(FrogWrap::InvalidFile)
+  if(file.open(QIODevice::ReadOnly))
   {
+    try
+    {
+      FrogWrap frog(&file);
+
+      ap.insert(tr("Bitrate"), tr("%1 kbps").arg(frog.bitrate()));
+      ap.insert(tr("Sample rate"), tr("%1 Hz").arg(frog.rate()));
+      ap.insert(tr("Channels"), QString::number(frog.channels()));
+      ap.insert(tr("Version"), QString::number(frog.version()));
+      ap.insert(tr("Compression ratio"), QString::number(frog.compression()));
+    }
+    catch(FrogWrap::InvalidFile)
+    {
+    }
   }
 }
 

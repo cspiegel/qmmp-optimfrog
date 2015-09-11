@@ -26,23 +26,24 @@
 
 #include <memory>
 
-#include <QString>
+#include <QIODevice>
 
 #include <qmmp/decoder.h>
 
 #include "decoder.h"
 
-OFRDecoder::OFRDecoder(const QString &path)
-        : Decoder(),
-          path(path)
+OFRDecoder::OFRDecoder(QIODevice *device) : Decoder(device)
 {
 }
 
 bool OFRDecoder::initialize()
 {
+  if(!input()) return false;
+  if(!input()->isOpen() && !input()->open(QIODevice::ReadOnly)) return false;
+
   try
   {
-    frog = std::unique_ptr<FrogWrap>(new FrogWrap(path.toUtf8().constData()));
+    frog = std::unique_ptr<FrogWrap>(new FrogWrap(input()));
   }
   catch(FrogWrap::InvalidFile)
   {

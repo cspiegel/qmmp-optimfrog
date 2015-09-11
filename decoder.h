@@ -29,7 +29,7 @@
 
 #include <memory>
 
-#include <QString>
+#include <QIODevice>
 
 #include <qmmp/decoder.h>
 
@@ -38,7 +38,7 @@
 class OFRDecoder : public Decoder
 {
   public:
-    explicit OFRDecoder(const QString &);
+    explicit OFRDecoder(QIODevice *);
 
     bool initialize();
     qint64 totalTime();
@@ -48,7 +48,6 @@ class OFRDecoder : public Decoder
 
   private:
     std::unique_ptr<FrogWrap> frog;
-    QString path;
 };
 
 #endif
