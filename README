@@ -1,4 +1,5 @@
-This is a plugin for Qmmp which supports OptimFROG files.
+This is a plugin for Qmmp (1.0.0 or greater) which supports OptimFROG
+files.
 
 The OptimFROG SDK is required: http://www.losslessaudio.org/SDK.php.
 Only version 1.400 (corresponding to OptimFROG 5.000) and later are
@@ -21,16 +22,16 @@ OptimFROG.
 
 Qmmp plus development headers need to be installed.  Some vendors may
 split Qmmp into two packages, with the development package being named
-something like qmmp-devel or libqmmp-dev.  Qt4 development packages are
+something like qmmp-devel or libqmmp-dev.  Qt5 development packages are
 also required.
 
 A C++11 compiler is required.  Modern releases of GCC and Clang work
 fine.
 
-To build, run Qt4's qmake (often installed as qmake-qt4), passing the
+To build, run Qt5's qmake (often installed as qmake-qt5), passing the
 path to the SDK, and then build with make:
 
-$ qmake-qt4 OPTIMFROG_PATH=/path/to/OptimFROG_Linux_x64_5002/SDK
+$ qmake-qt5 OPTIMFROG_PATH=/path/to/OptimFROG_Linux_x64_5002/SDK
 $ make
 
 To install:

@@ -85,11 +85,7 @@ Decoder *OFRDecoderFactory::create(const QString &, QIODevice *device)
   return new OFRDecoder(device);
 }
 
-#if QMMP_VERSION_MAJOR == 0 && QMMP_VERSION_MINOR == 8
-QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, bool use_metadata)
-#elif QMMP_VERSION_MAJOR == 0 && QMMP_VERSION_MINOR == 9
 QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, bool use_metadata, QStringList *)
-#endif
 {
   QList<FileInfo *> list;
   QFile file(filename);
@@ -162,5 +158,3 @@ QTranslator *OFRDecoderFactory::createTranslator(QObject *)
 {
   return nullptr;
 }
-
-Q_EXPORT_PLUGIN2(cas-ofr, OFRDecoderFactory)

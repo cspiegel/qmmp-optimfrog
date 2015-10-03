@@ -1,12 +1,11 @@
 HEADERS += decoderfactory.h decoder.h metadatamodel.h frogwrap.h
 SOURCES += decoder.cpp decoderfactory.cpp metadatamodel.cpp frogwrap.cpp
 
-CONFIG += warn_on plugin
+CONFIG += warn_on plugin c++11
 
 TEMPLATE = lib
 
 QMAKE_CLEAN += lib$${TARGET}.so
-QMAKE_CXXFLAGS += -std=c++11
 
 unix {
   CONFIG += link_pkgconfig
