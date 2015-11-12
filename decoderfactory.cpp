@@ -104,13 +104,13 @@ QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, boo
         std::map<enum Qmmp::MetaData, std::string> tagmap =
         {
           { Qmmp::TITLE, "Title" },
-     { Qmmp::ARTIST, "Artist" },
-     { Qmmp::ALBUM, "Album" },
-     { Qmmp::COMMENT, "Comment" },
-     { Qmmp::GENRE, "Genre" },
-     { Qmmp::COMPOSER, "Composer" },
-     { Qmmp::YEAR, "Year" },
-     { Qmmp::TRACK, "Track" },
+          { Qmmp::ARTIST, "Artist" },
+          { Qmmp::ALBUM, "Album" },
+          { Qmmp::COMMENT, "Comment" },
+          { Qmmp::GENRE, "Genre" },
+          { Qmmp::COMPOSER, "Composer" },
+          { Qmmp::YEAR, "Year" },
+          { Qmmp::TRACK, "Track" },
         };
 
         for(auto &pair : tagmap)
