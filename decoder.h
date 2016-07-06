@@ -43,7 +43,7 @@ class OFRDecoder : public Decoder
     bool initialize();
     qint64 totalTime();
     int bitrate();
-    qint64 read(char *, qint64);
+    qint64 read(unsigned char *, qint64);
     void seek(qint64);
 
   private:

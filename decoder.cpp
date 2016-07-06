@@ -78,7 +78,7 @@ int OFRDecoder::bitrate()
   return frog->bitrate();
 }
 
-qint64 OFRDecoder::read(char *audio, qint64 max_size)
+qint64 OFRDecoder::read(unsigned char *audio, qint64 max_size)
 {
   return frog->read(audio, max_size);
 }
