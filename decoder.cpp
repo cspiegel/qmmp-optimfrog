@@ -68,12 +68,12 @@ bool OFRDecoder::initialize()
   return true;
 }
 
-qint64 OFRDecoder::totalTime()
+qint64 OFRDecoder::totalTime() const
 {
   return frog->length();
 }
 
-int OFRDecoder::bitrate()
+int OFRDecoder::bitrate() const
 {
   return frog->bitrate();
 }

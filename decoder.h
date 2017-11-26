@@ -41,8 +41,8 @@ class OFRDecoder : public Decoder
     explicit OFRDecoder(QIODevice *);
 
     bool initialize();
-    qint64 totalTime();
-    int bitrate();
+    qint64 totalTime() const;
+    int bitrate() const;
     qint64 read(unsigned char *, qint64);
     void seek(qint64);
 
