@@ -50,7 +50,7 @@ OFRMetaDataModel::OFRMetaDataModel(const QString &path, QObject *parent) : MetaD
       ap.insert(tr("Version"), QString::number(frog.version()));
       ap.insert(tr("Compression ratio"), QString::number(frog.compression()));
     }
-    catch(FrogWrap::InvalidFile)
+    catch(const FrogWrap::InvalidFile &)
     {
     }
   }

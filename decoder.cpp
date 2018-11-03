@@ -45,7 +45,7 @@ bool OFRDecoder::initialize()
   {
     frog = std::unique_ptr<FrogWrap>(new FrogWrap(input()));
   }
-  catch(FrogWrap::InvalidFile)
+  catch(const FrogWrap::InvalidFile &)
   {
     return false;
   }

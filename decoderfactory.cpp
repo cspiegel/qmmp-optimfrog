@@ -51,7 +51,7 @@ bool OFRDecoderFactory::canDecode(QIODevice *device) const
     FrogWrap frog(device);
     return true;
   }
-  catch(FrogWrap::InvalidFile)
+  catch(const FrogWrap::InvalidFile &)
   {
     return false;
   }
@@ -113,7 +113,7 @@ QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, boo
             QString value = QString::fromStdString(frog.get_tag(pair.second));
             file_info->setMetaData(pair.first, value.replace('\n', "<br>"));
           }
-          catch(std::out_of_range)
+          catch(const std::out_of_range &)
           {
           }
         }
@@ -121,7 +121,7 @@ QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, boo
 
       list << file_info;
     }
-    catch(FrogWrap::InvalidFile)
+    catch(const FrogWrap::InvalidFile &)
     {
     }
   }
