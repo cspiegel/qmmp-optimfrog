@@ -44,13 +44,6 @@
 #include "frogwrap.h"
 #include "metadatamodel.h"
 
-bool OFRDecoderFactory::supports(const QString &source) const
-{
-  QFile file(source);
-
-  return file.open(QIODevice::ReadOnly) && canDecode(&file);
-}
-
 bool OFRDecoderFactory::canDecode(QIODevice *device) const
 {
   try
