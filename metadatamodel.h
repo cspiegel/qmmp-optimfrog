@@ -37,14 +37,14 @@
 
 class OFRMetaDataModel : public MetaDataModel
 {
-  Q_OBJECT
+  Q_DECLARE_TR_FUNCTIONS(OFRMetaDataModel)
 
   public:
-    OFRMetaDataModel(const QString &, QObject *);
-    QHash<QString, QString> audioProperties();
+    OFRMetaDataModel(const QString &);
+    QList<MetaDataItem> extraProperties() const override;
 
   private:
-    QHash<QString, QString> ap;
+    QList<MetaDataItem> ap;
 };
 
 #endif

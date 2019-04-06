@@ -40,11 +40,11 @@ class OFRDecoder : public Decoder
   public:
     explicit OFRDecoder(QIODevice *);
 
-    bool initialize();
-    qint64 totalTime() const;
-    int bitrate() const;
-    qint64 read(unsigned char *, qint64);
-    void seek(qint64);
+    bool initialize() override;
+    qint64 totalTime() const override;
+    int bitrate() const override;
+    qint64 read(unsigned char *, qint64) override;
+    void seek(qint64) override;
 
   private:
     std::unique_ptr<FrogWrap> frog;

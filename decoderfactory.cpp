@@ -36,7 +36,6 @@
 #include <QTranslator>
 #include <QtPlugin>
 
-#include <qmmp/fileinfo.h>
 #include <qmmp/qmmp.h>
 
 #include "decoderfactory.h"
@@ -57,7 +56,7 @@ bool OFRDecoderFactory::canDecode(QIODevice *device) const
   }
 }
 
-const DecoderProperties OFRDecoderFactory::properties() const
+DecoderProperties OFRDecoderFactory::properties() const
 {
   DecoderProperties properties;
 
@@ -78,60 +77,66 @@ Decoder *OFRDecoderFactory::create(const QString &, QIODevice *device)
   return new OFRDecoder(device);
 }
 
-QList<FileInfo *> OFRDecoderFactory::createPlayList(const QString &filename, bool use_metadata, QStringList *)
+QList<TrackInfo *> OFRDecoderFactory::createPlayList(const QString &filename, TrackInfo::Parts parts, QStringList *)
 {
-  QList<FileInfo *> list;
+  QList<TrackInfo *> list;
   QFile file(filename);
 
-  if(file.open(QIODevice::ReadOnly))
+  if(parts & (TrackInfo::MetaData | TrackInfo::Properties))
   {
-    try
+    if(file.open(QIODevice::ReadOnly))
     {
-      FrogWrap frog(&file);
-      FileInfo *file_info = new FileInfo(filename);
-
-      file_info->setLength(frog.length() / 1000);
-
-      if(use_metadata && frog.has_tags())
+      try
       {
-        std::map<enum Qmmp::MetaData, std::string> tagmap =
-        {
-          { Qmmp::TITLE, "Title" },
-          { Qmmp::ARTIST, "Artist" },
-          { Qmmp::ALBUM, "Album" },
-          { Qmmp::COMMENT, "Comment" },
-          { Qmmp::GENRE, "Genre" },
-          { Qmmp::COMPOSER, "Composer" },
-          { Qmmp::YEAR, "Year" },
-          { Qmmp::TRACK, "Track" },
-        };
+        FrogWrap frog(&file);
+        TrackInfo *file_info = new TrackInfo(filename);
 
-        for(auto &pair : tagmap)
+        if(parts & TrackInfo::Properties)
         {
-          try
+          file_info->setDuration(frog.length() / 1000);
+        }
+
+        if((parts & TrackInfo::MetaData) && frog.has_tags())
+        {
+          std::map<enum Qmmp::MetaData, std::string> tagmap =
           {
-            QString value = QString::fromStdString(frog.get_tag(pair.second));
-            file_info->setMetaData(pair.first, value.replace('\n', "<br>"));
-          }
-          catch(const std::out_of_range &)
+            { Qmmp::TITLE, "title" },
+            { Qmmp::ARTIST, "artist" },
+            { Qmmp::ALBUM, "album" },
+            { Qmmp::COMMENT, "comment" },
+            { Qmmp::GENRE, "genre" },
+            { Qmmp::COMPOSER, "composer" },
+            { Qmmp::YEAR, "year" },
+            { Qmmp::TRACK, "track" },
+          };
+
+          for(auto &pair : tagmap)
           {
+            try
+            {
+              QString value = QString::fromStdString(frog.get_tag(pair.second));
+              file_info->setValue(pair.first, value.replace('\n', "<br>"));
+            }
+            catch(const std::out_of_range &)
+            {
+            }
           }
         }
-      }
 
-      list << file_info;
-    }
-    catch(const FrogWrap::InvalidFile &)
-    {
+        list << file_info;
+      }
+      catch(const FrogWrap::InvalidFile &)
+      {
+      }
     }
   }
 
   return list;
 }
 
-MetaDataModel *OFRDecoderFactory::createMetaDataModel(const QString &path, QObject *parent)
+MetaDataModel *OFRDecoderFactory::createMetaDataModel(const QString &path, bool)
 {
-  return new OFRMetaDataModel(path, parent);
+  return new OFRMetaDataModel(path);
 }
 
 void OFRDecoderFactory::showSettings(QWidget *)
@@ -147,7 +152,7 @@ void OFRDecoderFactory::showAbout(QWidget *parent)
   QMessageBox::about(parent, title, text);
 }
 
-QTranslator *OFRDecoderFactory::createTranslator(QObject *)
+QString OFRDecoderFactory::translation() const
 {
-  return nullptr;
+  return QString(":/cas-optimfrog_plugin_");
 }

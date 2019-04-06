@@ -34,7 +34,7 @@
 #include "metadatamodel.h"
 #include "frogwrap.h"
 
-OFRMetaDataModel::OFRMetaDataModel(const QString &path, QObject *parent) : MetaDataModel(parent)
+OFRMetaDataModel::OFRMetaDataModel(const QString &path) : MetaDataModel(true)
 {
   QFile file(path);
 
@@ -44,11 +44,11 @@ OFRMetaDataModel::OFRMetaDataModel(const QString &path, QObject *parent) : MetaD
     {
       FrogWrap frog(&file);
 
-      ap.insert(tr("Bitrate"), tr("%1 kbps").arg(frog.bitrate()));
-      ap.insert(tr("Sample rate"), tr("%1 Hz").arg(frog.rate()));
-      ap.insert(tr("Channels"), QString::number(frog.channels()));
-      ap.insert(tr("Version"), QString::number(frog.version()));
-      ap.insert(tr("Compression ratio"), QString::number(frog.compression()));
+      ap << MetaDataItem(tr("Bitrate"), tr("%1 kbps").arg(frog.bitrate()));
+      ap << MetaDataItem(tr("Sample rate"), tr("%1 Hz").arg(frog.rate()));
+      ap << MetaDataItem(tr("Channels"), QString::number(frog.channels()));
+      ap << MetaDataItem(tr("Version"), QString::number(frog.version()));
+      ap << MetaDataItem(tr("Compression ratio"), QString::number(frog.compression()));
     }
     catch(const FrogWrap::InvalidFile &)
     {
@@ -56,7 +56,7 @@ OFRMetaDataModel::OFRMetaDataModel(const QString &path, QObject *parent) : MetaD
   }
 }
 
-QHash<QString, QString> OFRMetaDataModel::audioProperties()
+QList<MetaDataItem> OFRMetaDataModel::extraProperties() const
 {
   return ap;
 }
