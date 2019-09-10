@@ -18,6 +18,6 @@ unix {
   INCLUDEPATH += $$LOCAL_INCLUDES
 
   plugin.path = $${PLUGIN_DIR}
-  plugin.files = libcas-ofr.so
+  plugin.files = lib$${TARGET}.so
   INSTALLS += plugin
 }
